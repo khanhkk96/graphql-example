@@ -32,7 +32,7 @@ export class CategoryService {
       });
     }
 
-    if (pageOptions.status) {
+    if (pageOptions.status != undefined) {
       queryBuilder.andWhere('category.status = :status', {
         status: pageOptions.status,
       });

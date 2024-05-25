@@ -1,3 +1,5 @@
+import responseCachePlugin from '@apollo/server-plugin-response-cache';
+import { ApolloServerPluginCacheControl } from '@apollo/server/plugin/cacheControl';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -28,6 +30,15 @@ import { TypeOrmConfigService } from './typeorm-config-service';
           }),
         ],
       },
+      plugins: [
+        ApolloServerPluginCacheControl({
+          // Cache everything for 1 second by default.
+          defaultMaxAge: 10,
+          // Don't send the `cache-control` response header.
+          calculateHttpHeaders: false,
+        }),
+        responseCachePlugin(),
+      ],
     }),
     ItemModule,
     CategoryModule,
