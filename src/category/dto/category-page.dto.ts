@@ -4,7 +4,7 @@ import {
   IPageDataDto,
   IPageOptionsDto,
   PageParameterDto,
-} from 'src/base/page-data.dto';
+} from 'src/base/page-data.paging';
 import { ActiveStatus } from 'src/enums/active.enum';
 import { CategoryEntity } from '../category.entity';
 import { CategoryDto } from './category.dto';

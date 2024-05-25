@@ -1,6 +1,6 @@
 import { Field, ID, InputType, ObjectType } from '@nestjs/graphql';
 import { IsNotEmpty, IsOptional, IsUUID } from 'class-validator';
-import { BaseDto } from 'src/base/baseDto.dto';
+import { BaseDto } from 'src/base/baseDto.paging';
 import { CategoryDto } from 'src/category/dto/category.dto';
 import { ItemEntity } from '../item.entity';
 

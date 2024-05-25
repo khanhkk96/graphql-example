@@ -1,6 +1,6 @@
 import { Directive, Field, InputType, ObjectType } from '@nestjs/graphql';
 import { IsNotEmpty } from 'class-validator';
-import { BaseDto } from 'src/base/baseDto.dto';
+import { BaseDto } from 'src/base/baseDto.paging';
 import { ActiveStatus } from 'src/enums/active.enum';
 import { CategoryEntity } from '../category.entity';
 

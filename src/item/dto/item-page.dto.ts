@@ -3,7 +3,7 @@ import {
   IPageDataDto,
   IPageOptionsDto,
   PageParameterDto,
-} from 'src/base/page-data.dto';
+} from 'src/base/page-data.paging';
 import { ItemEntity } from '../item.entity';
 import { ItemDto } from './item.dto';
 
