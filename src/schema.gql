@@ -1,0 +1,77 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+directive @upper on FIELD_DEFINITION
+
+type CategoryDto {
+  id: ID!
+  created: DateTime!
+  updated: DateTime!
+  name: String!
+  status: ActiveStatus!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+enum ActiveStatus {
+  INACTIVE
+  ACTIVE
+}
+
+type CategoryPageDto {
+  total: Int!
+  pages: Int!
+  take: Int!
+  page: Int!
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  items: [CategoryDto!]!
+}
+
+type ItemDto {
+  id: ID!
+  created: DateTime!
+  updated: DateTime!
+  name: String!
+  category: CategoryDto
+}
+
+type ItemPageDto {
+  total: Int!
+  pages: Int!
+  take: Int!
+  page: Int!
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  items: [ItemDto!]!
+}
+
+type Query {
+  item(id: String!): ItemDto!
+  items(page: Int! = 1, take: Int! = 10, q: String = ""): ItemPageDto!
+  categories(page: Int! = 1, take: Int! = 10, q: String = "", status: ActiveStatus): CategoryPageDto!
+  category(id: String!): CategoryDto!
+}
+
+type Mutation {
+  createItem(data: ItemInputDto!): ItemDto!
+  updateItem(id: String!, data: ItemInputDto!): ItemDto!
+  deleteItem(id: String!): ItemDto!
+  createCategory(data: CategoryInputDto!): CategoryDto!
+  updateCategory(id: String!, data: CategoryInputDto!): CategoryDto!
+  deleteCategory(id: String!): CategoryDto!
+}
+
+input ItemInputDto {
+  name: String!
+  categoryId: ID
+}
+
+input CategoryInputDto {
+  name: String!
+  status: ActiveStatus = ACTIVE
+}
