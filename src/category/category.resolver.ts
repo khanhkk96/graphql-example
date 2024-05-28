@@ -1,4 +1,6 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Inject } from '@nestjs/common';
+import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
+import { PubSub } from 'graphql-subscriptions';
 import { CategoryService } from './category.service';
 import {
   CategoryPageDto,
@@ -8,7 +10,11 @@ import { CategoryDto, CategoryInputDto } from './dto/category.dto';
 
 @Resolver('Category')
 export class CategoryResolver {
-  constructor(private categoryService: CategoryService) {}
+  constructor(
+    private categoryService: CategoryService,
+    // @Inject('PUB_SUB') private pubSub: RedisPubSub,
+    @Inject('PUB_SUB') private pubSub: PubSub,
+  ) {}
 
   @Query((returns) => CategoryPageDto)
   async categories(
@@ -27,7 +33,18 @@ export class CategoryResolver {
   async createCategory(
     @Args('data') data: CategoryInputDto,
   ): Promise<CategoryDto> {
-    return await this.categoryService.create(data);
+    const category = await this.categoryService.create(data);
+    this.pubSub.publish('sendCategory', { sendCategory: category });
+    return category;
+  }
+
+  @Subscription((returns) => CategoryDto)
+  sendCategory(@Args('id') id: string) {
+    try {
+      return this.pubSub.asyncIterator('sendCategory');
+    } catch (ex) {
+      console.log(ex);
+    }
   }
 
   @Mutation((returns) => CategoryDto)

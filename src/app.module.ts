@@ -2,6 +2,7 @@ import responseCachePlugin from '@apollo/server-plugin-response-cache';
 import { ApolloServerPluginCacheControl } from '@apollo/server/plugin/cacheControl';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DirectiveLocation, GraphQLDirective } from 'graphql';
@@ -15,12 +16,28 @@ import { ItemModule } from './item/item.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfigService,
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      // installSubscriptionHandlers: true,
+      subscriptions: {
+        'graphql-ws': true,
+        'subscriptions-transport-ws': {
+          path: '/graphql',
+          onConnect: (connectionParams, webSocket) => {
+            // handle connection auth
+            // console.log('connecting...');
+          },
+          onDisconnect: (webSocket, context) => {
+            // handle disconnection
+            // console.log('disconnecting...');
+          },
+        },
+      },
       transformSchema: (schema) => upperDirectiveTransformer(schema, 'upper'),
       buildSchemaOptions: {
         directives: [

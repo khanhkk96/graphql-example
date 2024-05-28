@@ -75,3 +75,7 @@ input CategoryInputDto {
   name: String!
   status: ActiveStatus = ACTIVE
 }
+
+type Subscription {
+  sendCategory(id: String!): CategoryDto!
+}
