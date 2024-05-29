@@ -13,6 +13,7 @@ import { CategoryModule } from './category/category.module';
 import { TypeOrmConfigService } from './database/typeorm-config-service';
 import { upperDirectiveTransformer } from './directives/upper.directive';
 import { ItemModule } from './item/item.module';
+import hasValuableMiddleware from './middlewares/check-valuable.middleware';
 
 @Module({
   imports: [
@@ -28,14 +29,14 @@ import { ItemModule } from './item/item.module';
         'graphql-ws': true,
         'subscriptions-transport-ws': {
           path: '/graphql',
-          onConnect: (connectionParams, webSocket) => {
-            // handle connection auth
-            // console.log('connecting...');
-          },
-          onDisconnect: (webSocket, context) => {
-            // handle disconnection
-            // console.log('disconnecting...');
-          },
+          // onConnect: (connectionParams, webSocket) => {
+          //   // handle connection auth
+          //   // console.log('connecting...');
+          // },
+          // onDisconnect: (webSocket, context) => {
+          //   // handle disconnection
+          //   // console.log('disconnecting...');
+          // },
         },
       },
       transformSchema: (schema) => upperDirectiveTransformer(schema, 'upper'),
@@ -46,6 +47,7 @@ import { ItemModule } from './item/item.module';
             locations: [DirectiveLocation.FIELD_DEFINITION],
           }),
         ],
+        fieldMiddleware: [hasValuableMiddleware],
       },
       plugins: [
         ApolloServerPluginCacheControl({
